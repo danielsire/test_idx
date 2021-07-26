@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: data-producer
+  profiles.active: local
+  rabbitmq:
+    password: guest
+    port: 15672
+    username: guest
+    exchange: client.exchange
+    queue: client.queue
+    routingkey: client.routingkey
+
+---
+spring:
+  profiles: local
+  rabbitmq:
+    host: localhost
+
+---
+spring:
+  profiles: docker
+  rabbitmq:
+    host: rabbitmq

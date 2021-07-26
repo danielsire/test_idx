@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: test_idx_db
+    image: postgres:11.1-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: clients
+      POSTGRES_PASSWORD: clients
+      POSTGRES_DB: clients
+    volumes:
+      - ~/storage/test_idx/postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - test_idx
+
+  rabbitmq:
+    container_name: test_idx_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    volumes:
+      - ~/storage/test_idx/rabbitmq:/var/lib/rabbitmq
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    restart: always
+    networks:
+      - test_idx
+
+networks:
+  test_idx:
+    driver: bridge

@@ -1,0 +1,5 @@
+databaseChangeLog:
+
+  - include:
+      file: 01-clients.yaml
+      relativeToChangelogFile: true

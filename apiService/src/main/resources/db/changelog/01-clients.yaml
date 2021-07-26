@@ -1,0 +1,97 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: 1
+      author: danielsire
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+  - changeSet:
+      id: 2
+      author: danielsire
+      changes:
+        - createTable:
+            tableName: client_type
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: TIMESTAMP
+              - column:
+                  name: updated
+                  type: TIMESTAMP
+        - addUniqueConstraint:
+            columnNames: type
+            constraintName: const_type
+            schemaName: public
+            tableName: client_type
+            validate: true
+
+  - changeSet:
+      id: 3
+      author: danielsire
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: identifier
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(100)
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_type_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: client_type_fk
+                    references: client_type(id)
+              - column:
+                  name: created
+                  type: TIMESTAMP
+              - column:
+                  name: updated
+                  type: TIMESTAMP
+        - addUniqueConstraint:
+            columnNames: first_name, last_name
+            constraintName: const_names
+            schemaName: public
+            tableName: client
+            validate: true
