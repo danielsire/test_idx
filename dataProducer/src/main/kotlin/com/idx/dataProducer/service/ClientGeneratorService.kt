@@ -26,7 +26,7 @@ internal class ClientGeneratorService(
 
                 val name = names[Random.nextInt(0, names.size-1)] as LinkedHashMap<String, String>
                 val type = types[Random.nextInt(0, types.size-1)] as LinkedHashMap<String, String>
-                val surNameExtraChar = RandomStringUtils.randomAlphabetic(4)
+                val surNameExtraChar = RandomStringUtils.randomAlphabetic(6)
 
                 broker.send(
                         ClientDto(

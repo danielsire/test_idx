@@ -14,6 +14,31 @@ spring:
     exchange: client.exchange
     queue: client.queue
     routingkey: client.routingkey
+  data:
+    elasticsearch:
+      cluster-name: test_idx
+      repositories:
+        enabled: true
+      properties:
+        index:
+          search:
+            slowlog:
+              threshold:
+                query:
+                  info: 1ms
+
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            core: DEBUG
+      elasticsearch:
+        index:
+          search:
+            showlog:
+              query: INFO
 
 ---
 spring:
@@ -30,6 +55,10 @@ spring:
     hibernate.ddl-auto: none
   rabbitmq:
     host: localhost
+  data:
+    elasticsearch:
+      cluster-nodes: localhost:9300
+
 
 ---
 spring:
@@ -61,3 +90,6 @@ spring:
     hibernate.ddl-auto: none
   rabbitmq:
     host: rabbitmq
+  data:
+    elasticsearch:
+      cluster-nodes: elasticsearch:9300

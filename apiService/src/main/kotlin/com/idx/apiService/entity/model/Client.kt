@@ -1,4 +1,4 @@
-package com.idx.apiService.model
+package com.idx.apiService.entity.model
 
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
@@ -10,7 +10,7 @@ internal class Client(
 
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
+        var id: Long? = null,
 
         val identifier: UUID,
 
