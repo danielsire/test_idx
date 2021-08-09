@@ -33,12 +33,8 @@ logging:
       springframework:
         data:
           elasticsearch:
-            core: DEBUG
-      elasticsearch:
-        index:
-          search:
-            showlog:
-              query: INFO
+            client:
+              WIRE: trace
 
 ---
 spring:
