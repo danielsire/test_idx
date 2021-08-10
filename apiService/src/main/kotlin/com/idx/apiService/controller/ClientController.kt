@@ -17,9 +17,23 @@ internal class ClientController(
 ) {
 
     @GetMapping("/{isActive}")
-    fun produce(@PathVariable isActive:Boolean): ResponseEntity<List<ClientJson?>> {
+    fun getByIsActive(@PathVariable isActive:Boolean): ResponseEntity<List<ClientJson?>> {
         return ResponseEntity.ok(
             clientDocumentService.getByIsActive(isActive).map(ClientDocument::toJson).toList()
+        )
+    }
+
+    @GetMapping("first-name/{firstName}")
+    fun getByFirstName(@PathVariable firstName:String): ResponseEntity<Any> {
+        clientDocumentService.findClientsByFirsName(firstName)
+        return ResponseEntity.ok("")
+    }
+
+    @GetMapping("name/{name}")
+    fun getByName(@PathVariable name:String): ResponseEntity<List<ClientJson?>> {
+
+        return ResponseEntity.ok(
+            clientDocumentService.findClientsByFirsNameAndLastName(name).map(ClientDocument::toJson).toList()
         )
     }
 
