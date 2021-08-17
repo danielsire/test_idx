@@ -17,23 +17,36 @@ internal class ClientController(
 ) {
 
     @GetMapping("/{isActive}")
-    fun getByIsActive(@PathVariable isActive:Boolean): ResponseEntity<List<ClientJson?>> {
+    fun getByIsActive(@PathVariable isActive:Boolean): ResponseEntity<List<ClientJson>?> {
         return ResponseEntity.ok(
-            clientDocumentService.getByIsActive(isActive).map(ClientDocument::toJson).toList()
+            clientDocumentService.getByIsActive(isActive)
+                .map(ClientDocument::toJson).toList()
         )
     }
 
     @GetMapping("first-name/{firstName}")
-    fun getByFirstName(@PathVariable firstName:String): ResponseEntity<Any> {
-        clientDocumentService.findClientsByFirsName(firstName)
-        return ResponseEntity.ok("")
+    fun getByFirstNames(@PathVariable firstName:String): ResponseEntity<List<ClientJson>?> {
+        clientDocumentService.findClientsByFirstName(firstName)
+        return ResponseEntity.ok(
+            clientDocumentService.findClientsByFirstName(firstName)
+                .map(ClientDocument::toJson).toList()
+        )
     }
 
-    @GetMapping("name/{name}")
-    fun getByName(@PathVariable name:String): ResponseEntity<List<ClientJson?>> {
+    @GetMapping("name/{firstName}")
+    fun getByFirsNameAndLastName(@PathVariable firstName:String): ResponseEntity<List<ClientJson>?> {
 
         return ResponseEntity.ok(
-            clientDocumentService.findClientsByFirsNameAndLastName(name).map(ClientDocument::toJson).toList()
+            clientDocumentService.findClientsByFirsNameAndLastName(firstName)
+                .map(ClientDocument::toJson).toList()
+        )
+    }
+
+    @GetMapping("names/{name}")
+    fun getByName(@PathVariable name:String): ResponseEntity<List<String>?> {
+
+        return ResponseEntity.ok(
+            clientDocumentService.fetchFirstNames(name)
         )
     }
 

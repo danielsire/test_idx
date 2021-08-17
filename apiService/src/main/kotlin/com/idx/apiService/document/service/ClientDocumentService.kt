@@ -26,16 +26,25 @@ internal class ClientDocumentService(
         private val elasticsearchOperations: ElasticsearchOperations
 ) {
 
-    fun findClientsByFirsName(firstName: String) {
+    fun findClientsByFirstName(firstName: String): MutableList<ClientDocument> {
         val queryBuilder: QueryBuilder = matchQuery("firstName", firstName)
         val searchQuery: Query = NativeSearchQueryBuilder()
             .withQuery(queryBuilder)
+            .withPageable(PageRequest.of(0, 30))
             .build()
         val clientHits: SearchHits<ClientDocument> = elasticsearchOperations.search(
                 searchQuery,
                 ClientDocument::class.java,
                 IndexCoordinates.of(INDEX)
             )
+
+        val clientMatches: MutableList<ClientDocument> = ArrayList<ClientDocument>()
+        clientHits.forEach(Consumer<SearchHit<ClientDocument?>> { searchHit: SearchHit<ClientDocument?> ->
+            clientMatches.add(
+                searchHit.content
+            )
+        })
+        return clientMatches
     }
 
     fun findClientsByFirsNameAndLastName(name: String): MutableList<ClientDocument> {
@@ -46,6 +55,7 @@ internal class ClientDocumentService(
 
         val searchQuery: Query = NativeSearchQueryBuilder()
             .withFilter(queryBuilder)
+            .withPageable(PageRequest.of(0, 30))
             .build()
 
         // 2. Execute search
@@ -63,6 +73,31 @@ internal class ClientDocumentService(
             )
         })
         return clientMatches
+    }
+
+    fun fetchFirstNames(query: String): List<String>? {
+        val queryBuilder: QueryBuilder = QueryBuilders
+            .wildcardQuery("firstName", "$query*")
+
+        val searchQuery: Query = NativeSearchQueryBuilder()
+            .withFilter(queryBuilder)
+            .withPageable(PageRequest.of(0, 5))
+            .build()
+
+        val searchNames: SearchHits<ClientDocument> = elasticsearchOperations.search(
+            searchQuery,
+            ClientDocument::class.java,
+            IndexCoordinates.of(INDEX)
+        )
+
+        val names: MutableList<String> = ArrayList()
+        searchNames.searchHits.forEach(Consumer<SearchHit<ClientDocument>> { searchHit: SearchHit<ClientDocument> ->
+            names.add(
+                searchHit.content.firstName
+            )
+        })
+
+        return names
     }
 
     fun save(client: ClientDto) {
